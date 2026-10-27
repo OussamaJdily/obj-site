@@ -1,4 +1,4 @@
-/* Nova Studio — shared behaviour for every page.
+/* OBJ — shared behaviour for every page.
    No libraries: requestAnimationFrame, IntersectionObserver and Canvas 2D only.
    Every module checks that its elements exist, so one file serves all pages. */
 (() => {
@@ -21,8 +21,8 @@
   /* ---------- page transition: circle grows from the click, shrinks on the next page ---------- */
   const pt = $('.pt');
   if (pt && !reduce) {
-    const saved = store.get('nova-pt');
-    store.del('nova-pt');
+    const saved = store.get('obj-pt');
+    store.del('obj-pt');
     if (saved) {
       try {
         const p = JSON.parse(saved);
@@ -43,7 +43,7 @@
       e.preventDefault();
       const x = e.clientX / innerWidth * 100, y = e.clientY / innerHeight * 100;
       root.style.setProperty('--pt-x', x + '%'); root.style.setProperty('--pt-y', y + '%');
-      store.set('nova-pt', JSON.stringify({ x, y, t: Date.now() }));
+      store.set('obj-pt', JSON.stringify({ x, y, t: Date.now() }));
       root.classList.add('pt-leave');
       setTimeout(() => { location.href = url.href; }, 620);
     });
@@ -54,9 +54,13 @@
   const intro = $('.intro');
   let introDelay = 0;
   if (intro) {
-    if (store.get('nova-intro') || reduce || root.classList.contains('no-intro')) root.classList.add('no-intro');
+    if (store.get('obj-intro') || reduce || root.classList.contains('no-intro')) root.classList.add('no-intro');
     else introDelay = 2300;
-    store.set('nova-intro', '1');
+    store.set('obj-intro', '1');
+    // put the green dot right after the wordmark, whatever its length
+    const word = $('text', intro), dot = $('circle', intro);
+    const placeDot = () => { const bb = word.getBBox(); dot.setAttribute('cx', bb.x + bb.width + 22); };
+    placeDot(); document.fonts?.ready.then(placeDot);
   }
 
   /* ---------- reveals ---------- */
@@ -142,7 +146,7 @@
     const tickClock = () => clocks.forEach(c => c.textContent = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: c.dataset.clock || 'Europe/Berlin' }));
     tickClock(); setInterval(tickClock, 10000);
   }
-  $$('[data-year]').forEach(y => y.textContent = new Date().getFullYear());
+  $$('[data-year]').forEach(y => y.textContent = Math.max(+y.textContent || 0, new Date().getFullYear()));
 
   /* ---------- custom cursor, magnetic buttons, tilt cards ---------- */
   if (fine && !reduce) {
@@ -178,14 +182,14 @@
   /* ---------- UI sound (soft blip on hover when switched on) ---------- */
   const soundBtn = $('[data-sound]');
   if (soundBtn) {
-    let actx = null, on = store.get('nova-sound') === '1';
+    let actx = null, on = store.get('obj-sound') === '1';
     const render = () => {
       soundBtn.classList.toggle('is-on', on); soundBtn.setAttribute('aria-pressed', on);
       $('[data-sound-label]', soundBtn).textContent = on ? 'Sound on' : 'Sound off';
     };
     render();
     soundBtn.addEventListener('click', () => {
-      on = !on; store.set('nova-sound', on ? '1' : '0'); render();
+      on = !on; store.set('obj-sound', on ? '1' : '0'); render();
       if (on && !actx) actx = new (window.AudioContext || window.webkitAudioContext)();
     });
     document.addEventListener('pointerover', e => {

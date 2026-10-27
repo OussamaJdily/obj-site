@@ -1,4 +1,4 @@
-# Nova Studio website
+# OBJ website
 
 A static, 26-page agency website. It has **zero npm dependencies** and needs only Node.js 18+ to build. The finished site is plain HTML, CSS and JS in `dist/`, so it runs on any host.
 

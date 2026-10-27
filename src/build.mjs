@@ -1,4 +1,4 @@
-// Static site generator for Nova Studio.
+// Static site generator for the OBJ website.
 // Edit BRAND and the content objects below, then run:  node src/build.mjs
 // Every page is written as a flat .html file in the project root.
 import { writeFileSync, mkdirSync, readFileSync, cpSync, rmSync } from 'node:fs';
@@ -14,19 +14,21 @@ const VERSION = { css: hash('site.css'), js: hash('site.js') };
 
 /* ============================== BRAND ============================== */
 const BRAND = {
-  name: 'Nova Studio',
-  word: 'nova',                       // wordmark; the last letter gets the green dot
-  mark: 'n',                          // letter in the floating pill
+  name: 'OBJ',
+  word: 'OBJ',                        // wordmark; the last letter gets the green dot
+  mark: 'O',                          // letter in the floating pill
   tagline: 'branding & design studio.',
-  city: 'Berlin',
-  timezone: 'Europe/Berlin',
-  phone: '+49 30 0000000',
-  phoneHref: '+49300000000',
-  email: 'hello@example.com',
-  address: ['Nova Studio', 'Example Street 1', '10115 Berlin, Germany'],
+  city: 'Casablanca',
+  country: 'MA',
+  timezone: 'Africa/Casablanca',
+  phone: '+212 5 22 00 00 00',
+  phoneHref: '+212522000000',
+  email: 'contact@obj.ma',
+  address: ['OBJ Studio', 'Boulevard d’Anfa', '20000 Casablanca, Morocco'],
+  year: 2027,
   formEndpoint: '',                   // e.g. a Formspree URL; empty = opens the visitor's e-mail app
   socials: [['in', 'https://www.linkedin.com/'], ['ig', 'https://www.instagram.com/']],
-  url: 'https://example.com',
+  url: 'https://obj.ma',
 };
 
 /* ============================== HELPERS ============================== */
@@ -98,14 +100,14 @@ const footer = () => `
       <a class="contact__row" href="mailto:${BRAND.email}"><span class="t-label t-muted">Email</span><strong>${BRAND.email} <span>→</span></strong></a>
     </div>
     <div class="foot-cols">
-      <div><div class="awards" style="margin:0"><b>W</b><span>Web<br>Awards<br>2025</span><hr><span>Studio of<br>the year<br>nominee</span></div></div>
+      <div><div class="awards" style="margin:0"><b>W</b><span>Web<br>Awards<br>2027</span><hr><span>Studio of<br>the year<br>nominee</span></div></div>
       <div><p class="t-label t-muted">Solutions</p><a href="visibility.html">Visibility</a><a href="conversion.html">Conversion</a><a href="strategy-workshops.html">Strategy &amp; workshops</a></div>
       <div><p class="t-label t-muted">${BRAND.name}</p><a href="projects.html">Projects</a><a href="agency.html">Agency</a><a href="insights.html">Insights</a><a href="contact.html">Contact</a></div>
       <div><p class="t-label t-muted">Studio</p><p style="margin:8px 0 0">${BRAND.address.join('<br>')}</p>
         <div class="socials">${BRAND.socials.map(([l, h]) => `<a href="${h}" target="_blank" rel="noopener" aria-label="${l}">${l}</a>`).join('')}</div></div>
     </div>
   </div>
-  <div class="legal"><span>© <span data-year></span> ${BRAND.name}</span><span><a href="legal-notice.html">Legal notice</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></span></div>
+  <div class="legal"><span>© <span data-year>${BRAND.year}</span> ${BRAND.name}</span><span><a href="legal-notice.html">Legal notice</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></span></div>
   <div class="wordmark" data-wordmark aria-hidden="true">${wordmarkLetters()}</div>
 </footer>`;
 
@@ -124,12 +126,12 @@ const layout = ({ file, title, description, page = '', body, intro = false, extr
 <link rel="canonical" href="${BRAND.url}/${file === 'index.html' ? '' : file}">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23080808'/%3E%3Ctext x='6' y='24' font-family='Arial' font-weight='800' font-size='22' fill='%23f5f5f2'%3E${BRAND.mark}%3C/text%3E%3Ccircle cx='25' cy='9' r='3.5' fill='%23cdfb50'/%3E%3C/svg%3E">
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'ProfessionalService', name: BRAND.name, url: BRAND.url, email: BRAND.email, telephone: BRAND.phone,
-  address: { '@type': 'PostalAddress', streetAddress: BRAND.address[1], addressLocality: BRAND.city, addressCountry: 'DE' } })}</script>
+  address: { '@type': 'PostalAddress', streetAddress: BRAND.address[1], addressLocality: BRAND.city, addressCountry: BRAND.country } })}</script>
 <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css?v=${VERSION.css}">
 </head>
 <body data-page="${page}">
-${intro ? `<div class="intro" aria-hidden="true"><svg viewBox="0 0 520 160"><text x="10" y="120">${BRAND.word}</text><circle cx="${BRAND.word.length * 58 + 238}" cy="112" r="14"/></svg></div>` : ''}
+${intro ? `<div class="intro" aria-hidden="true"><svg viewBox="0 0 520 160"><text x="260" y="120" text-anchor="middle">${BRAND.word}</text><circle cx="400" cy="112" r="14"/></svg></div>` : ''}
 <div class="pt" aria-hidden="true"></div>
 <div class="bg-dots" aria-hidden="true"></div>
 <div class="bg-morph" aria-hidden="true"></div>
@@ -243,56 +245,56 @@ const browserMock = (word, tint = '189 108 247') => `<div class="media" data-til
 
 /* ============================== CONTENT: PROJECTS ============================== */
 const PROJECTS = [
-  { slug: 'orbit', name: 'ORBIT', title: 'A new product nobody knew yet.', city: 'Hamburg', industry: 'Consumer electronics', tags: 'Visibility · Conversion', tint: '189 108 247', year: '2026', featured: true,
+  { slug: 'orbit', name: 'ORBIT', title: 'A new product nobody knew yet.', city: 'Casablanca', industry: 'Consumer electronics', tags: 'Visibility · Conversion', tint: '189 108 247', year: '2027', featured: true,
     services: ['Brand', 'Launch website', 'Online shop', 'SEO'],
     intro: ['ORBIT had built a magnetic power bank that clips onto any phone. The product was great. The problem: nobody was searching for it, because nobody knew it existed.', 'We built a launch site that explains the product in seconds, a shop that turns curiosity into orders, and content that ranks for the problems people actually search for.'],
     timeline: [['Discovery', 'Interviews with early buyers showed people never searched for “power bank” — they searched for “phone dies at festival”.'], ['Positioning', 'We moved the story from specs to situations: concerts, travel, long shifts.'], ['Launch site & shop', 'A single scroll that sells, then a checkout with three steps instead of seven.'], ['Search content', 'Guides around real situations, linked straight to the product.']],
     statement: ['Unknown on launch day.', 'Sold out in week six.'],
     built: [['Launch page', 'Scroll story with product animation.'], ['Shop', 'Three-step checkout, Apple Pay & PayPal.'], ['Bundles', 'Upsell at the moment of decision.'], ['SEO guides', 'Situational content that ranks.'], ['Reviews', 'Social proof next to every button.'], ['Analytics', 'Funnel tracking from first visit to order.']],
-    quote: ['They didn’t ask what our website should look like. They asked why people weren’t buying. That question changed everything.', 'Lena Vogt, Founder, ORBIT'],
+    quote: ['They didn’t ask what our website should look like. They asked why people weren’t buying. That question changed everything.', 'Salma Benali, Founder, ORBIT'],
     metrics: [[3.4, 'x', '', 'more orders in the first quarter'], [62, '%', '', 'of shop visits from organic search'], [41, '%', '−', 'checkout abandonment']],
     credits: [['Strategy', BRAND.name], ['Design', BRAND.name], ['Development', BRAND.name], ['Photography', 'Client']] },
-  { slug: 'hartmann', name: 'Hartmann', title: 'A great product nobody could find.', city: 'Hamburg', industry: 'Furniture', tags: 'Visibility · Conversion', tint: '205 251 80', year: '2025',
+  { slug: 'atlas-bois', name: 'Atlas Bois', title: 'A great product nobody could find.', city: 'Casablanca', industry: 'Furniture', tags: 'Visibility · Conversion', tint: '205 251 80', year: '2027',
     services: ['SEO', 'Website relaunch', 'Product configurator'],
-    intro: ['Hartmann makes solid-wood furniture to order. Their customers loved them — but online, the big chains took every search result.', 'We restructured the site around how people actually look for furniture and made every product page a landing page.'],
+    intro: ['Atlas Bois makes solid-wood furniture to order in Aïn Sebaâ. Their customers loved them — but online, the big chains took every search result.', 'We restructured the site around how people actually look for furniture and made every product page a landing page.'],
     timeline: [['Search analysis', '1,800 relevant search terms, grouped by intent.'], ['Information architecture', 'Categories rebuilt around rooms and needs instead of internal product codes.'], ['Product pages', 'Each page answers the five questions buyers ask before a call.'], ['Local SEO', 'Showroom visibility for “near me” searches.']],
     statement: ['Hidden behind the big chains.', 'Now on page one.'],
     built: [['Category hubs', 'Rooms, materials, styles.'], ['Product pages', 'Built to rank and to convert.'], ['Configurator', 'Wood, size, finish — with live price.'], ['Showroom', 'Booking in two clicks.'], ['Local SEO', 'Google Business Profile & reviews.'], ['Tracking', 'Every inquiry traced to its source.']],
-    quote: ['For the first time, people come into the showroom already knowing what they want.', 'Jonas Hartmann, Managing Director'],
+    quote: ['For the first time, people come into the showroom already knowing what they want.', 'Youssef El Amrani, Managing Director'],
     metrics: [[212, '%', '+', 'organic traffic in 9 months'], [2.6, 'x', '', 'more configurator inquiries'], [38, '', '', 'keywords on page one']],
-    credits: [['Strategy', BRAND.name], ['SEO', BRAND.name], ['Development', BRAND.name], ['Photography', 'Studio Licht']] },
-  { slug: 'lingua-lab', name: 'Lingua Lab', title: 'In price comparisons, the big players always won.', city: 'Cologne', industry: 'Education', tags: 'Visibility · Conversion', tint: '120 140 255', year: '2025',
+    credits: [['Strategy', BRAND.name], ['SEO', BRAND.name], ['Development', BRAND.name], ['Photography', 'Studio Anfa']] },
+  { slug: 'lingua-lab', name: 'Lingua Lab', title: 'In price comparisons, the big players always won.', city: 'Rabat', industry: 'Education', tags: 'Visibility · Conversion', tint: '120 140 255', year: '2026',
     services: ['Positioning', 'Website', 'SEO'],
     intro: ['Lingua Lab teaches business English in small groups. When people compared prices, the big schools always looked cheaper.', 'We stopped competing on price and started competing on outcome: a website that sells results, not hours.'],
     timeline: [['Positioning', 'From “language courses” to “confident in meetings in 12 weeks”.'], ['Course finder', 'Three questions lead to the right course.'], ['Proof', 'Before/after stories from real participants.'], ['SEO', 'Content for specific business situations.']],
     statement: ['Too expensive in comparison.', 'Worth it in context.'],
     built: [['Course finder', 'The right course in three questions.'], ['Course pages', 'Outcome first, price second.'], ['Booking', 'Trial lesson in under a minute.'], ['Stories', 'Participant results.'], ['Company offers', 'Packages for HR teams.'], ['SEO content', 'Business-English topics.']],
-    quote: ['We used to lose on price. Now people ask for us by name.', 'Sarah Klein, Head of School'],
+    quote: ['We used to lose on price. Now people ask for us by name.', 'Nadia Berrada, Head of School'],
     metrics: [[74, '%', '+', 'trial lesson bookings'], [31, '%', '+', 'average order value'], [19, '', '', 'company contracts in year one']],
     credits: [['Strategy', BRAND.name], ['Copy', BRAND.name], ['Design', BRAND.name], ['Development', BRAND.name]] },
-  { slug: 'lumen-photo', name: 'Lumen Photo', title: 'Anyone who wanted to book had to call first.', city: 'Munich', industry: 'Photography', tags: 'Conversion', tint: '255 170 120', year: '2024',
+  { slug: 'lumen-photo', name: 'Lumen Photo', title: 'Anyone who wanted to book had to call first.', city: 'Marrakech', industry: 'Photography', tags: 'Conversion', tint: '255 170 120', year: '2026',
     services: ['Website', 'Online booking', 'Pricing pages'],
     intro: ['Lumen Photo is a portrait studio. Every booking started with a phone call — and half of the calls came while the photographer was shooting.', 'We put prices, packages and available slots online, so people can book at 11 pm on a Sunday.'],
     timeline: [['Call analysis', 'Eight questions came up in almost every call. We answered all of them on the site.'], ['Packages', 'Three clear packages instead of an hourly rate.'], ['Booking', 'Calendar with deposit payment.'], ['Follow-up', 'Automatic reminders and gallery delivery.']],
     statement: ['Every booking was a phone call.', 'Now most happen overnight.'],
     built: [['Packages', 'Three clear offers.'], ['Booking', 'Live availability with deposit.'], ['Portfolio', 'Fast, filterable galleries.'], ['FAQ', 'The eight questions, answered.'], ['Vouchers', 'Gift cards sold online.'], ['Reminders', 'Fewer no-shows.']],
-    quote: ['I finally have my evenings back — and more bookings than before.', 'Mara Lind, Photographer'],
+    quote: ['I finally have my evenings back — and more bookings than before.', 'Imane Tazi, Photographer'],
     metrics: [[68, '%', '', 'of bookings now fully online'], [45, '%', '−', 'phone calls'], [22, '%', '+', 'revenue per month']],
     credits: [['Design', BRAND.name], ['Development', BRAND.name], ['Copy', BRAND.name], ['Photography', 'Lumen Photo']] },
-  { slug: 'kesselhaus', name: 'Kesselhaus', title: 'Nobody could find their way around the website.', city: 'Leipzig', industry: 'Events & venue', tags: 'Visibility · Conversion', tint: '255 120 170', year: '2024',
+  { slug: 'dar-events', name: 'Dar Events', title: 'Nobody could find their way around the website.', city: 'Tangier', industry: 'Events & venue', tags: 'Visibility · Conversion', tint: '255 120 170', year: '2026',
     services: ['UX', 'Website relaunch', 'Event inquiry flow'],
-    intro: ['Kesselhaus is a venue for concerts, weddings and company events. The old website tried to serve everyone on one page — and served no one.', 'We split the site by audience and built a guided inquiry that gives the events team everything they need up front.'],
+    intro: ['Dar Events is a venue for concerts, weddings and company events. The old website tried to serve everyone on one page — and served no one.', 'We split the site by audience and built a guided inquiry that gives the events team everything they need up front.'],
     timeline: [['User research', 'Three audiences, three completely different questions.'], ['Structure', 'Separate paths for guests, couples and companies.'], ['Inquiry flow', 'Date, guests, budget, wishes — in one guided form.'], ['Event calendar', 'Public events with ticket links.']],
     statement: ['One page for everyone.', 'A clear path for each.'],
     built: [['Audience paths', 'Guests, couples, companies.'], ['Inquiry flow', 'Guided, five steps.'], ['Room finder', 'Capacity and layouts.'], ['Calendar', 'Events and tickets.'], ['Gallery', 'Real events, real rooms.'], ['SEO', 'Venue searches in the region.']],
-    quote: ['Inquiries now arrive complete. We can send an offer the same day.', 'Tom Becker, Events Manager'],
+    quote: ['Inquiries now arrive complete. We can send an offer the same day.', 'Karim Bennani, Events Manager'],
     metrics: [[2.1, 'x', '', 'event inquiries'], [57, '%', '−', 'back-and-forth e-mails'], [34, '%', '+', 'bookings for company events']],
     credits: [['UX', BRAND.name], ['Design', BRAND.name], ['Development', BRAND.name], ['Photography', 'Client']] },
 ];
 
 /* ============================== CONTENT: INSIGHTS ============================== */
 const INSIGHTS = [
-  { slug: 'seo-or-geo', topic: 'Visibility', title: 'SEO or GEO: what does your business need first?', word: 'GEO', tint: '189 108 247', date: '12 Oct 2026', read: '7 min',
+  { slug: 'seo-or-geo', topic: 'Visibility', title: 'SEO or GEO: what does your business need first?', word: 'GEO', tint: '189 108 247', date: '12 Jan 2027', read: '7 min',
     excerpt: 'AI assistants answer questions that used to send people to Google. Does that make SEO obsolete? Not quite.',
     sections: [
       ['What is changing in search', '<p>More and more people ask ChatGPT, Perplexity or Google’s AI Overviews instead of scrolling through ten blue links. The answer appears directly — sometimes with a source, sometimes without.</p><p>For businesses, this raises a new question: not only “are we ranking?” but also “are we being mentioned?”</p>'],
@@ -301,7 +303,7 @@ const INSIGHTS = [
       ['Why GEO does not replace SEO', '<p>AI systems draw heavily on content that already ranks well. A site that is invisible to Google is rarely quoted by an AI assistant. GEO builds on SEO; it does not replace it.</p>'],
       ['The sensible order', '<ol><li>Fix the technical foundation.</li><li>Cover the searches with real buying intent.</li><li>Make your facts consistent everywhere — website, profiles, directories.</li><li>Then optimize for being cited in AI answers.</li></ol><p>Not sure where you stand? The <a href="potential-check.html">potential check</a> gives you a first assessment in two minutes.</p>'],
     ] },
-  { slug: 'visitors-no-inquiries', topic: 'Conversion', title: 'Plenty of visitors, but no inquiries? Here’s where they drop off.', word: 'CTA', tint: '205 251 80', date: '28 Sep 2026', read: '6 min',
+  { slug: 'visitors-no-inquiries', topic: 'Conversion', title: 'Plenty of visitors, but no inquiries? Here’s where they drop off.', word: 'CTA', tint: '205 251 80', date: '9 Jan 2027', read: '6 min',
     excerpt: 'Traffic is up, inquiries are flat. Before you redesign everything, check these five places.',
     sections: [
       ['Traffic is not the goal', '<p>A rising visitor graph feels good. But if the number of inquiries stays flat, the website has a conversion problem — not a visibility problem.</p>'],
@@ -311,7 +313,7 @@ const INSIGHTS = [
       ['4. Forms that feel like paperwork', '<p>Twelve required fields for a first contact? Ask only for what you need to reply. The rest can wait for the conversation.</p><blockquote>Every field you remove is a small invitation to say yes.</blockquote>'],
       ['5. No proof', '<p>Reviews, logos, case studies and real photos turn “sounds good” into “I trust them”. Place them next to the decision, not on a separate page.</p>'],
     ] },
-  { slug: 'relaunch-or-optimize', topic: 'Strategy', title: 'Relaunch or optimize? How to decide without guessing.', word: 'NEW?', tint: '120 140 255', date: '9 Sep 2026', read: '5 min',
+  { slug: 'relaunch-or-optimize', topic: 'Strategy', title: 'Relaunch or optimize? How to decide without guessing.', word: 'NEW?', tint: '120 140 255', date: '14 Dec 2026', read: '5 min',
     excerpt: 'A new website feels like a fresh start. Sometimes it is. Often, targeted fixes deliver more — faster.',
     sections: [
       ['The relaunch reflex', '<p>When results disappoint, a new website is the obvious answer. But a new design on the same weak structure produces the same weak results — just prettier.</p>'],
@@ -319,7 +321,7 @@ const INSIGHTS = [
       ['When a relaunch makes sense', '<ul><li>The system blocks every change.</li><li>Your offer or audience has changed significantly.</li><li>Structure, content and design all need to change at once.</li></ul>'],
       ['How we decide', '<p>We start with an analysis: data, search demand, user behaviour. Then we compare effort and impact. The answer is rarely all or nothing.</p><div class="callout"><strong>Rule of thumb</strong>Fix the leaks first. Rebuild only when the foundation itself is the leak.</div>'],
     ] },
-  { slug: 'forms-that-block', topic: 'Conversion', title: 'Forms that prevent inquiries — and how to fix them.', word: 'FORM', tint: '255 170 120', date: '21 Aug 2026', read: '4 min',
+  { slug: 'forms-that-block', topic: 'Conversion', title: 'Forms that prevent inquiries — and how to fix them.', word: 'FORM', tint: '255 170 120', date: '2 Dec 2026', read: '4 min',
     excerpt: 'The contact form is the last step before a lead. It is also where many of them quietly disappear.',
     sections: [
       ['The most expensive page element', '<p>Everything before the form costs money: ads, SEO, content, design. If people give up at the form, all of that investment is lost.</p>'],
@@ -341,7 +343,7 @@ const SERVICES = {
     rail: [['A ranking is', 'not a result yet.'], 'Position one is worthless if nobody clicks — or if the site doesn’t convince them afterwards. That’s why we think SEO all the way to the customer.', ['Search', 'Ranking', 'Click', 'Website', 'Conversion', 'Customer'], 3, ['conversion.html', 'Conversion']],
     split: [['Local SEO: be found', 'where your customers are.'], 'For businesses serving a region, local search matters most — in Google Search, Google Maps and your Business Profile.', 'We make sure your information is complete, consistent and convincing.'],
     cross: ['And when search stops showing a list?', 'SEO lays the foundation. GEO extends your visibility into the answers of AI systems.', 'geo.html', 'GEO'],
-    projects: ['hartmann', 'lingua-lab'], cta: ['How much demand are you', 'leaving on the table?'] },
+    projects: ['atlas-bois', 'lingua-lab'], cta: ['How much demand are you', 'leaving on the table?'] },
   geo: { file: 'geo.html', page: 'visibility', title: 'GEO', parent: ['visibility.html', 'Visibility'],
     h: ['When AI answers,', 'your business', 'should be in it.'],
     lead: 'ChatGPT, Perplexity and Google’s AI Overviews answer questions directly. GEO makes sure your business is understood — and recommended.',
@@ -353,7 +355,7 @@ const SERVICES = {
     rail: [['A mention is', 'not a customer yet.'], 'Being recommended by AI only pays off if your website then convinces. That’s why GEO and conversion belong together.', ['Question', 'AI answer', 'Mention', 'Website', 'Inquiry', 'Customer'], 3, ['conversion.html', 'Conversion']],
     split: [['GEO builds', 'on SEO.'], 'AI systems rely heavily on content that already ranks well.', 'A business that is invisible on Google is rarely mentioned by AI. We take care of both.'],
     cross: ['Start with the foundation.', 'Without technical SEO and relevant content, GEO has nothing to build on.', 'seo.html', 'SEO'],
-    projects: ['orbit', 'hartmann'], cta: ['What does AI say', 'about your business?'] },
+    projects: ['orbit', 'atlas-bois'], cta: ['What does AI say', 'about your business?'] },
   websites: { file: 'websites.html', page: 'conversion', title: 'Websites', parent: ['conversion.html', 'Conversion'],
     h: ['A website that', 'turns visitors', 'into customers.'],
     lead: 'Not just a nice-looking site. A website that explains what you offer in seconds, answers the real questions and makes the next step easy.',
@@ -365,7 +367,7 @@ const SERVICES = {
     rail: [['Launch is the', 'start, not the end.'], 'After launch we watch how people use the site and keep improving what matters.', ['Analysis', 'Concept', 'Design', 'Build', 'Launch', 'Optimize'], 5, ['conversion-optimization.html', 'Conversion optimization']],
     split: [['Relaunch or', 'optimize?'], 'Not every problem needs a new website.', 'We tell you honestly whether targeted improvements will do the job.'],
     cross: ['Selling products online?', 'For online shops the path to purchase has its own rules.', 'online-shops.html', 'Online shops'],
-    projects: ['lumen-photo', 'kesselhaus'], cta: ['Is your website', 'working for you?'] },
+    projects: ['lumen-photo', 'dar-events'], cta: ['Is your website', 'working for you?'] },
   'online-shops': { file: 'online-shops.html', page: 'conversion', title: 'Online shops', parent: ['conversion.html', 'Conversion'],
     h: ['A shop that', 'sells, not just', 'shows.'],
     lead: 'From product page to checkout: we build online shops that remove doubt, reduce abandonment and make buying feel easy.',
@@ -377,7 +379,7 @@ const SERVICES = {
     rail: [['A visit is', 'not an order yet.'], 'We look at the whole path, from the first search to the confirmation e-mail.', ['Search', 'Product', 'Cart', 'Checkout', 'Order', 'Repeat'], 2, ['conversion-optimization.html', 'Conversion optimization']],
     split: [['Products people', 'search for.'], 'Product and category pages are your best SEO assets.', 'We build them to rank and to sell.'],
     cross: ['Selling services instead?', 'For services, the website has to answer different questions.', 'websites.html', 'Websites'],
-    projects: ['orbit', 'hartmann'], cta: ['Where does your shop', 'lose buyers?'] },
+    projects: ['orbit', 'atlas-bois'], cta: ['Where does your shop', 'lose buyers?'] },
   'conversion-optimization': { file: 'conversion-optimization.html', page: 'conversion', title: 'Conversion optimization', parent: ['conversion.html', 'Conversion'],
     h: ['More customers', 'from the visitors', 'you already have.'],
     lead: 'Before you buy more traffic, use the traffic you have. We find out why visitors leave — and fix it with data, not opinions.',
@@ -398,13 +400,13 @@ const HUBS = {
     statement: [['Being found is good.', 'Being found by the', 'right people is better.']],
     subs: [['seo.html', 'SEO', 'Search engine optimization', 'Show up when people search for what you offer — on Google, Bing and Maps.', ['Technical SEO', 'Content', 'Local SEO']], ['geo.html', 'GEO', 'Generative engine optimization', 'Be understood and recommended by ChatGPT, Perplexity and AI Overviews.', ['AI audit', 'Entity facts', 'Monitoring']]],
     rail: [['Visibility is the', 'first half.'], 'Getting found brings people to your website. What happens there is the second half — conversion.', ['Search', 'Ranking', 'Click', 'Website', 'Conversion', 'Customer'], 3, ['conversion.html', 'Conversion']],
-    projects: ['hartmann', 'orbit'] },
+    projects: ['atlas-bois', 'orbit'] },
   conversion: { file: 'conversion.html', title: 'Conversion', crumb: 'After the click',
     h: ['Not chosen', 'enough?'], lead: 'Visitors arrive, but few become customers. We find out where they hesitate and build websites and shops that make the decision easy.',
     statement: [['Traffic is not', 'the goal. Customers are.']],
     subs: [['websites.html', 'Websites', 'For services', 'Websites that explain, convince and make the next step easy.', ['Strategy', 'Design', 'Development']], ['online-shops.html', 'Online shops', 'For products', 'Shops that remove doubt and reduce abandonment.', ['Product pages', 'Checkout', 'Payment']], ['conversion-optimization.html', 'Conversion optimization', 'For existing sites', 'More customers from the visitors you already have.', ['Analysis', 'A/B tests', 'Landing pages']]],
     rail: [['The click is', 'only the beginning.'], 'Every step after the click is a chance to win — or lose — a customer.', ['Click', 'First impression', 'Orientation', 'Trust', 'Inquiry', 'Customer'], 1, ['visibility.html', 'Visibility']],
-    projects: ['lumen-photo', 'kesselhaus'] },
+    projects: ['lumen-photo', 'dar-events'] },
 };
 
 /* ============================== PAGE BUILDERS ============================== */
@@ -525,7 +527,7 @@ ${processSection()}
     <div>
       <div class="logo reveal" style="font-size:clamp(60px,7vw,100px)"><span>${BRAND.word.slice(0, -1)}<i>${BRAND.word.slice(-1)}</i></span><small style="font-size:clamp(14px,1.4vw,20px)">${BRAND.tagline}</small></div>
       <p class="lead reveal" style="margin-top:30px;max-width:34ch">A branding &amp; design studio from ${BRAND.city}. We start where businesses lose potential customers — before the click or after it.</p>
-      <div class="awards reveal"><b>W</b><span>Web<br>Awards<br>2025</span><hr><span>Studio of<br>the year<br>nominee</span></div>
+      <div class="awards reveal"><b>W</b><span>Web<br>Awards<br>2027</span><hr><span>Studio of<br>the year<br>nominee</span></div>
       <div class="reveal">${btn('agency.html', 'Meet the agency', 'ghost', 'btn--sm')}</div>
     </div>
   </div>
@@ -547,8 +549,8 @@ function featuredCase(p, boxed = false) {
 }
 
 function clientsMarquee() {
-  const a = ['Arcadia', 'Hartmann', 'Lingua Lab', 'ORBIT', 'Lumen', 'Lightfold', 'Northwind'];
-  const b = ['Kesselhaus', 'AnnoTech', 'Meridian', 'Halcyon', 'Firecraft', 'Kino One', 'Atlas'];
+  const a = ['Atlas Bois', 'Lingua Lab', 'ORBIT', 'Lumen', 'Sahara Tech', 'Anfa Café', 'Medina Craft'];
+  const b = ['Dar Events', 'Marina Yachts', 'Oasis Clinic', 'Argan & Co', 'Kasbah Hotels', 'Rif Coffee', 'Corniche Fit'];
   const row = (arr, rev) => `<div class="marquee${rev ? ' marquee--rev' : ''}"><ul class="marquee__track">${[...arr, ...arr].map((n, i) => `<li class="logo-tile"${i >= arr.length ? ' aria-hidden="true"' : ''}>${n}</li>`).join('')}</ul></div>`;
   return `<section class="clients on-space" data-space>
     <div class="section__head"><div><p class="t-label t-muted">Clients</p>${lines(['Trusted by teams', 'near and far.'])}</div></div>
@@ -714,7 +716,7 @@ ${losingCta(['Different company.', 'Different bottleneck.'], 'Your project')}`,
 });
 
 // ---------- AGENCY ----------
-const TEAM = [['Alex Morgan', 'Founder · Strategy'], ['Sam Rivera', 'Design lead'], ['Jordan Lee', 'Development'], ['Robin Klein', 'SEO & content']];
+const TEAM = [['Oussama Jdily', 'Founder · Strategy'], ['Yasmine Alaoui', 'Design lead'], ['Mehdi Chraibi', 'Development'], ['Sara Idrissi', 'SEO & content']];
 add('agency.html', {
   title: `Agency — ${BRAND.name}`, description: `We are ${BRAND.name}: a branding & design studio from ${BRAND.city}.`, page: 'agency',
   body: `
@@ -723,7 +725,7 @@ ${pageHero({ crumb: `${BRAND.name} / Agency`, h: [`We are ${BRAND.word}.`], lead
 ${statement(['Not an agency', 'that does everything.'], 'No social media management, no print flyers, no trade-fair booths.', 'Just visibility and conversion — done properly.')}
 <section class="clients" style="padding-top:0">
   <div class="section__head"><div><p class="t-label t-muted">Clients</p>${lines(['Who we work with.'])}</div></div>
-  <div class="logo-grid">${['Arcadia', 'Hartmann', 'Lingua Lab', 'ORBIT', 'Lumen', 'Lightfold', 'Northwind', 'Kesselhaus', 'AnnoTech', 'Meridian'].map(n => `<div class="logo-tile reveal">${n}</div>`).join('')}</div>
+  <div class="logo-grid">${['Atlas Bois', 'Lingua Lab', 'ORBIT', 'Lumen', 'Dar Events', 'Sahara Tech', 'Anfa Café', 'Medina Craft', 'Oasis Clinic', 'Kasbah Hotels'].map(n => `<div class="logo-tile reveal">${n}</div>`).join('')}</div>
 </section>
 <section class="crawl" aria-label="A new kind of visibility">
   ${[[-12, 0], [8, 2.3], [-4, 4.6], [16, 1.2], [-20, 5.5]].map(([a, d]) => `<span class="crawl__star" style="--angle:${a}deg;--dl:${d}s"></span>`).join('')}
@@ -813,7 +815,7 @@ ${pageHero({ crumb: `${BRAND.name} / Contact`, h: ['Let’s talk about', 'your p
       <form class="form__body" data-contact data-mail="${BRAND.email}" data-endpoint="${BRAND.formEndpoint}" novalidate>
         <p class="t-label t-muted" style="margin-bottom:26px">Project inquiry</p>
         <fieldset><legend>What is it about?</legend><div class="opts">${TOPICS.map(t => `<label class="opt"><input type="checkbox" name="topic" value="${t}"><span>${t}</span></label>`).join('')}</div></fieldset>
-        <div class="field"><label for="f-site">Website <small>(optional)</small></label><input class="input" id="f-site" name="site" type="url" placeholder="example.com" autocomplete="url"></div>
+        <div class="field"><label for="f-site">Website <small>(optional)</small></label><input class="input" id="f-site" name="site" type="url" placeholder="yourwebsite.ma" autocomplete="url"></div>
         <div class="field"><label for="f-msg">What would you like to change?</label><textarea class="input" id="f-msg" name="message" required></textarea><p class="field__error">Please tell us briefly what it is about.</p></div>
         <div class="field-row">
           <div class="field"><label for="f-name">Name</label><input class="input" id="f-name" name="name" required autocomplete="name"><p class="field__error">Please enter your name.</p></div>
@@ -882,26 +884,27 @@ ${pageHero({ crumb: `${BRAND.name} / Potential check`, h: ['Where are your', 'cu
 
 // ---------- LEGAL ----------
 const legalPage = (file, title, html) => add(file, {
-  title: `${title} — ${BRAND.name}`, description: `${title} of ${BRAND.name}.`, page: 'legal',
+  title: `${title} — ${BRAND.name}`, description: `${title} of ${BRAND.name}, branding & design studio in ${BRAND.city}.`, page: 'legal',
   body: `${pageHero({ crumb: `${BRAND.name} / ${title}`, h: [title + '.'] })}
 <section class="section legal-page" style="padding-top:0"><div class="prose">${html}</div></section>`,
 });
 legalPage('legal-notice.html', 'Legal notice', `
-<div class="callout"><strong>Placeholder</strong>Replace this text with your legally required company information (e.g. German “Impressum” under § 5 DDG). Have it checked by a lawyer.</div>
+<div class="callout"><strong>Placeholder</strong>Replace the bracketed fields with your official company information (Moroccan identifiers below). Have it checked by a lawyer or accountant.</div>
 <h2>Company</h2><p>${BRAND.address.join('<br>')}</p>
 <h2>Contact</h2><p>Phone: ${BRAND.phone}<br>Email: ${BRAND.email}</p>
-<h2>Represented by</h2><p>[Managing director’s name]</p>
-<h2>Register entry</h2><p>[Commercial register, court, registration number]</p>
-<h2>VAT ID</h2><p>[VAT identification number]</p>
+<h2>Legal form &amp; manager</h2><p>[SARL / SARL AU / auto-entrepreneur] — represented by [Manager’s name]</p>
+<h2>Registre du Commerce (RC)</h2><p>[RC number], Tribunal de Commerce de Casablanca</p>
+<h2>Identifiers</h2><p>ICE: [ICE number]<br>Identifiant Fiscal (IF): [IF number]<br>Taxe professionnelle (Patente): [number]</p>
+<h2>Hosting</h2><p>Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA</p>
 <h2>Responsible for content</h2><p>[Name, address]</p>`);
 legalPage('privacy.html', 'Privacy', `
-<div class="callout"><strong>Placeholder</strong>Replace this text with a privacy policy that matches the tools you actually use (hosting, analytics, fonts, form provider). Have it checked by a lawyer.</div>
+<div class="callout"><strong>Placeholder</strong>This policy follows Moroccan law n° 09-08 on the protection of personal data. Declare your processing to the CNDP (www.cndp.ma) and have this text checked by a lawyer.</div>
 <h2>Controller</h2><p>${BRAND.address.join('<br>')}<br>${BRAND.email}</p>
-<h2>Hosting</h2><p>[Hosting provider, location, purpose of server log files.]</p>
-<h2>Contact form &amp; e-mail</h2><p>When you contact us, we process your details to handle your inquiry (Art. 6(1)(b) GDPR). We delete them once they are no longer needed.</p>
+<h2>Hosting</h2><p>This website is hosted by Vercel Inc. (USA). When you visit it, the server automatically records technical data (IP address, browser, time of access) to deliver the site and keep it secure.</p>
+<h2>Contact form &amp; e-mail</h2><p>When you contact us, we process your details to handle your inquiry, in line with law n° 09-08. We delete them once they are no longer needed.</p>
 <h2>Fonts</h2><p>All fonts are hosted on our own server. No connection to Google or other font providers is made.</p>
 <h2>Local storage</h2><p>We store small preferences (sound on/off, whether the intro was shown) in your browser’s session storage. Nothing is sent to us.</p>
-<h2>Your rights</h2><p>You have the right to access, rectification, erasure, restriction of processing, data portability and objection, and the right to lodge a complaint with a supervisory authority.</p>`);
+<h2>Your rights</h2><p>You have the right to access, rectification, erasure, restriction of processing, data portability and objection, and the right to lodge a complaint with the CNDP (Commission Nationale de contrôle de la protection des Données à caractère Personnel).</p>`);
 
 // ---------- 404 ----------
 add('404.html', {

@@ -1,8 +1,8 @@
 {
-  "name": "nova-site",
+  "name": "obj-site",
   "version": "1.0.0",
   "private": true,
-  "description": "Nova Studio website: static, zero-dependency, motion-heavy agency site.",
+  "description": "OBJ website: static, zero-dependency, motion-heavy agency site.",
   "type": "module",
   "engines": {
     "node": ">=18"
