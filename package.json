@@ -1,0 +1,17 @@
+{
+  "name": "nova-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nova Studio website: static, zero-dependency, motion-heavy agency site.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node src/build.mjs",
+    "start": "node scripts/serve.mjs",
+    "dev": "npm run build && npm start",
+    "check": "npm run build && node scripts/check.mjs"
+  },
+  "license": "UNLICENSED"
+}
