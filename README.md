@@ -1,45 +1,56 @@
-# OBJ website
+# OBJ — website
 
-A static, 26-page agency website. It has **zero npm dependencies** and needs only Node.js 18+ to build. The finished site is plain HTML, CSS and JS in `dist/`, so it runs on any host.
+Branding & design studio website for **OBJ** (Casablanca), in **French and English**.
+Built with **Next.js 16** (App Router), **React 19** and **TypeScript**, made for **Vercel**.
 
-## Commands
-| Command | What it does |
+## Run it
+```bash
+npm install
+npm run dev        # http://localhost:3000  (redirects to /fr or /en)
+npm run build      # production build (also type-checks)
+npm start          # serve the production build
+```
+Requires Node.js 20.9 or newer.
+
+## Where things are
+| Path | What it is |
 |---|---|
-| `npm run build` | Generates the site into `dist/` |
-| `npm run dev` | Builds, then serves it at http://localhost:4173 with the production security headers |
-| `npm run check` | Builds, then checks links, assets, meta tags, CSP compliance and leftover placeholder data |
+| `lib/brand.ts` | **Company details**: name, phone, email, address, city, domain, social links |
+| `content/fr.ts`, `content/en.ts` | **All text**, in French and English (same structure, checked by TypeScript) |
+| `content/types.ts` | Shape of the content |
+| `app/[lang]/…` | Pages (`/fr/...` and `/en/...`) |
+| `components/` | Header, footer, menu, sections, globe, contact form, quiz |
+| `lib/effects.ts` | Scroll animations, smooth scrolling, counters, tilt cards |
+| `app/globals.css` | Design system: colors, type, layouts, animations |
+| `proxy.ts` | Language redirect (`/` → `/fr` or `/en`) and per-request Content-Security-Policy |
+| `app/api/contact/route.ts` | Contact form endpoint (sends e-mail) |
 
-## Change your details
-Everything lives in `src/build.mjs`:
-- `BRAND` at the top: name, wordmark, phone, email, address, city, time zone, socials, domain and form endpoint
-- `PROJECTS`: the case studies
-- `INSIGHTS`: the blog articles
-- `SERVICES` / `HUBS`: the service pages
-- `TEAM`: the team members
+## Pages (each in FR and EN)
+Home · Visibility · SEO · GEO · Conversion · Websites · Online shops · Conversion optimization ·
+Strategy & workshops · Projects + 5 case studies · Agency · Insights + 4 articles · Contact ·
+Potential check (quiz) · Legal notice · Privacy · 404. Plus `sitemap.xml`, `robots.txt`, share images and favicon.
 
-Run `npm run check` afterwards. It lists any placeholder text that's still left.
+## Deploy on Vercel
+1. On [vercel.com/new](https://vercel.com/new), import this GitHub repository. Vercel detects Next.js; keep the defaults and click **Deploy**.
+2. Optional: under **Settings → Environment Variables**, add:
 
-## Deploy
-| Host | How |
+| Variable | Purpose |
 |---|---|
-| **Netlify** | Connect the repo. `netlify.toml` already sets the build command and the `dist` folder. Headers come from `dist/_headers`. |
-| **Vercel** | Import the repo. `vercel.json` already sets the build, output folder and headers. |
-| **Cloudflare Pages** | Build command `npm run build`, output folder `dist`. Headers come from `dist/_headers`. |
-| **cPanel / Apache / shared hosting** | Run `npm run build` and upload the *contents* of `dist/` to `public_html`. `dist/.htaccess` sets HTTPS, headers, caching and the 404 page. |
+| `NEXT_PUBLIC_SITE_URL` | Your domain, e.g. `https://obj.ma` (used for canonical links, sitemap, share images) |
+| `RESEND_API_KEY` | API key from [resend.com](https://resend.com), so the contact form e-mails you directly |
+| `CONTACT_TO_EMAIL` | Where inquiries arrive, e.g. `contact@obj.ma` |
+| `CONTACT_FROM_EMAIL` | Sender, e.g. `OBJ <site@obj.ma>` (domain verified in Resend) |
 
-## Security and privacy built in
-- Strict **Content-Security-Policy**: only the site's own scripts, fonts and images can load. No inline JavaScript, no third parties.
-- HSTS, `X-Frame-Options: DENY`, `nosniff`, a strict referrer policy, Permissions-Policy and COOP.
-- **No external requests at all.** The font (Manrope, OFL license) is self-hosted, which keeps the site GDPR-friendly with no Google Fonts.
-- No cookies and no tracking, so no cookie banner is needed. If you add analytics later, you'll need a banner and a privacy-policy update.
-- The contact form has client-side validation and a honeypot field against spam bots.
-- Asset URLs carry a content hash, so files are cached for a year and still update on every deploy.
+Without the Resend variables the form still works: it opens the visitor's e-mail app with the message filled in.
 
-## Contact form
-Leave `BRAND.formEndpoint` empty and the form opens the visitor's e-mail app with the message filled in. To receive submissions directly, create a free form at a provider such as Formspree and paste its URL into `formEndpoint`. The security policy allows that domain automatically.
+## Security
+- Strict **Content-Security-Policy with a fresh nonce on every request**: only this site's own scripts can run.
+- HSTS, `X-Frame-Options: DENY`, `nosniff`, strict referrer policy, Permissions-Policy, COOP; `X-Powered-By` removed.
+- Contact API: same-origin check, input validation and length limits, honeypot against bots, rate limit (5 per 10 min per IP).
+- No cookies, no tracking, no third-party requests. The font (Manrope, OFL license) is self-hosted.
+- `npm audit`: 0 known vulnerabilities at the time of writing (Next.js 16.4.3).
 
-## Before launch (`npm run check` lists what's left)
-- Your real name, contact details and domain in `BRAND`
-- Legal notice and privacy policy texts, checked by a lawyer
-- Real photos and screenshots instead of the placeholder visuals
-- Real project results instead of the example figures
+## Before launch
+- Real phone, e-mail, address and domain in `lib/brand.ts`.
+- Team, clients, projects, testimonials, results and awards in `content/*.ts` are **sample content**. Replace them with real ones or remove them.
+- Legal notice and privacy policy: fill in RC, ICE, IF, declare to the CNDP, and have a lawyer check them.
