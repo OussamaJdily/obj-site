@@ -4,7 +4,7 @@
   "private": true,
   "description": "OBJ — branding & design studio website (Next.js, English & French).",
   "engines": {
-    "node": ">=20.9.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "next dev",
