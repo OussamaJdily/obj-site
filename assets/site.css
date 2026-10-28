@@ -636,8 +636,58 @@ textarea.input{height:130px;padding:14px 16px;resize:vertical}
   .pillars,.posts,.pc__opts,.field-row{grid-template-columns:1fr}
   .logo-grid{grid-template-columns:repeat(2,1fr)}
   .team{grid-template-columns:1fr 1fr}
-  .legal{flex-direction:column}
+  .legal{flex-direction:column;gap:8px;padding:24px 4px}
+
+  /* tighter vertical rhythm on phones */
+  .section{padding-top:72px;padding-bottom:72px}
+  .section--tight{padding-top:40px;padding-bottom:40px}
+  .statement{padding-top:96px;padding-bottom:96px}
+  .page-hero{padding-top:118px;padding-bottom:48px}
+  .page-hero__foot{margin-top:28px}
+  .page-hero__facts{flex-direction:column;gap:10px;margin-top:36px}
+  .section__head{margin-bottom:32px;gap:20px}
+  .journey{height:200vh}
+  .stance{height:260vh}
+  .process{height:220vh}
+  .clients{padding:72px 0}
+
+  /* node rails become a vertical list */
+  .rail{grid-template-columns:1fr;gap:20px;margin-top:40px}
+  .rail-section .rail{margin-top:40px}
+  .rail__line{left:6px;right:auto;top:6px;bottom:6px;width:1px;height:auto}
+  .rail__fill{transform-origin:top;transform:scaleY(var(--p,0))}
+  .rail__click{display:none}
+  .step,.rail .step{display:flex;align-items:center;gap:16px;text-align:left;font-size:16px}
+  .step::before{margin:0;flex:none}
+  .journey__labels{margin-top:28px}
+
+  /* process list: smaller words, description clear of the last one */
+  .process__sticky{gap:22px}
+  .process li{font-size:34px;gap:18px}
+  .process__desc{margin-top:18px}
+
+  /* footer: awards and address get full rows */
+  .contact{gap:28px}
+  .foot-cols{gap:28px 20px}
+  .foot-cols>div:first-child,.foot-cols>div:last-child{grid-column:1/-1}
+  .wordmark{padding-top:10vw}
+
+  /* cards & lists */
+  .card{padding:24px}
+  .card li a{font-size:20px}
+  .case{padding:26px 0;gap:14px}
+  .fcase{gap:28px;margin-bottom:50px}
+  .metric{padding:24px}
+  .crosslink{padding:26px;gap:16px}
+  .panel{padding:26px}
+  .panel__foot{margin-top:36px}
+  .form{padding:22px}
+  .opt span{height:40px;padding:0 14px}
+  .losing a{padding:18px 0}
+  .hero__foot .btn-row{width:100%}
 }
+/* the UI-sound toggle only reacts to mouse hover, so it is pointless on touch screens */
+@media (hover:none), (max-width:900px){.sound{display:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .lines .ln>span,.reveal,.card{transform:none!important;opacity:1!important}
